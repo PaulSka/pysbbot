@@ -10,24 +10,6 @@ import sqlite3
 import datetime
 import config_sb
 
-#Define URL
-MAIN_URL = "http://www.saltybet.com"
-LOGIN_URL = "http://www.saltybet.com/authenticate?signin=1"
-LOGOUT_URL = "http://www.saltybet.com/logout"
-BET_URL = "http://www.saltybet.com/ajax_place_bet.php"
-STATE_URL = "http://www.saltybet.com/state.json"
-
-#Define URL headers
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.77 Safari/537.36'
-}
-
-#Define WebSocket
-WS_URL = "www-cdn-twitch.saltybet.com"
-WS_PORT = 1337 # :)
-
-#Define SQLite DB path
-SQLITE_PATH = "db/pysbbot.sqlite"
 
 #Special Function
 def connect(session, email, password, user):
@@ -40,7 +22,7 @@ def connect(session, email, password, user):
         "pword" : password,
         "authenticate" : "signin"
     }
-    response = session.post(LOGIN_URL, data=payload)
+    response = session.post(config_sb.LOGIN_URL, data=payload)
     return user in response.text
 
 def place_bet(session, player, wager):
@@ -53,7 +35,7 @@ def place_bet(session, player, wager):
         "selectedplayer":player,
         "wager": wager
     }
-    response = session.post(BET_URL, data=payload)
+    response = session.post(config_sb.BET_URL, data=payload)
     return "1" in response.text
 
 def get_balance(session, user):
@@ -61,7 +43,7 @@ def get_balance(session, user):
     Get amount of wager
     Return float
     """
-    response = session.get(MAIN_URL)
+    response = session.get(config_sb.MAIN_URL)
     soup = BeautifulSoup.BeautifulSoup(response.text, "lxml")
     res_html = soup.find("span", {"id": "balance"})
     return float(res_html.replace(",", "."))
@@ -71,7 +53,7 @@ def allready_connected(session, user):
     Check if user is allready connected
     Return True if of
     """
-    response = session.get(MAIN_URL)
+    response = session.get(config_sb.MAIN_URL)
     return user in response.text
 
 def get_state(session):
@@ -79,14 +61,14 @@ def get_state(session):
     Get the state
     Return JSON
     """
-    response = session.get(STATE_URL)
+    response = session.get(config_sb.STATE_URL)
     return response.json()
 
 def insert_event_to_db(p1name, p2name, pwon):
     """
     Insert into db data ...
     """
-    conn = sqlite3.connect(SQLITE_PATH)
+    conn = sqlite3.connect(config_sb.SQLITE_PATH)
     cursor = conn.cursor()
     data = {
         "event_date" : datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
@@ -136,7 +118,7 @@ session = requests.session()
 session.headers.update(headers)
 
 #Connect to websocket
-socket = SocketIO(WS_URL, WS_PORT)
+socket = SocketIO(config_sb.WS_URL, config_sb.WS_PORT)
 
 #Attach function to message
 socket.on('message', on_ws_msg)
