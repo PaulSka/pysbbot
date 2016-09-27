@@ -113,6 +113,7 @@ def on_ws_msg(*args):
             insert_event_to_db(p1, p2, pwon=2)
     lastStatus = status
 
+print("Saltybot is running ...")
 #Create Request session
 session = requests.session()
 session.headers.update(config_sb.headers)
