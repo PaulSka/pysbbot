@@ -1,2 +1,3 @@
 git clone ...
-docker run rgooler/rpi-python3
+docker build -t pysbbot . 
+docker run -d -v /home/pirate/pysbbot:/data/pysbbot pysbbot python3 /data/pysbbot/saltybot.py

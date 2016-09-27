@@ -1,4 +1,6 @@
-from rgooler/rpi-python3
+from hypriot/rpi-python
 MAINTAINER LYSAKOWSKIM Mathieu (lysakowskimg@gmail.com)
 
-RUN pip-3.2 install requests beautifulsoup4 socketIO-client
+RUN pip-2.7 install requests beautifulsoup4 socketIO-client
+
+RUN python2 /data/pysbbot/saltybot.py
