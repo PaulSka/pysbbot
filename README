@@ -1,3 +1,3 @@
 git clone ...
 docker build -t pysbbot . 
-docker run -d -v /home/pirate/pysbbot:/data/pysbbot pysbbot python3 /data/pysbbot/saltybot.py
+docker run -d -v /home/pirate/pysbbot:/data/pysbbot pysbbot python2.7 /data/pysbbot/saltybot.py
