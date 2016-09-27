@@ -115,7 +115,7 @@ def on_ws_msg(*args):
 
 #Create Request session
 session = requests.session()
-session.headers.update(headers)
+session.headers.update(config_sb.headers)
 
 #Connect to websocket
 socket = SocketIO(config_sb.WS_URL, config_sb.WS_PORT)
