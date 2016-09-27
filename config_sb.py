@@ -20,7 +20,7 @@ WS_URL = "www-cdn-twitch.saltybet.com"
 WS_PORT = 1337 # :)
 
 #Define SQLite DB path
-SQLITE_PATH = os.path.join(os.getcwd(), "db", "pysbbot.sqlite")
+SQLITE_PATH = os.path.join("data", "pysbbot", "db", "pysbbot.sqlite")
 
 #Define User
 USER = "XXXX"
