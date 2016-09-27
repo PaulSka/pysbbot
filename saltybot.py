@@ -1,17 +1,14 @@
-
 # coding: utf-8
+#SaltyBot
 
-# In[1]:
-
+#Import module
 import json
 import requests
 import bs4 as BeautifulSoup
 from socketIO_client import SocketIO
 import sqlite3
 import datetime
-
-
-# In[2]:
+import config_sb
 
 #Define URL
 MAIN_URL = "http://www.saltybet.com"
@@ -20,35 +17,19 @@ LOGOUT_URL = "http://www.saltybet.com/logout"
 BET_URL = "http://www.saltybet.com/ajax_place_bet.php"
 STATE_URL = "http://www.saltybet.com/state.json"
 
-
-# In[3]:
-
 #Define URL headers
 headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.77 Safari/537.36'
 }
 
-
-# In[4]:
-
 #Define WebSocket
 WS_URL = "www-cdn-twitch.saltybet.com"
 WS_PORT = 1337 # :)
 
-
-# In[5]:
-
 #Define SQLite DB path
 SQLITE_PATH = "db/pysbbot.sqlite"
 
-
-# In[6]:
-
 #Special Function
-
-
-# In[7]:
-
 def connect(session, email, password, user):
     """
     Login to saltybet
@@ -61,9 +42,6 @@ def connect(session, email, password, user):
     }
     response = session.post(LOGIN_URL, data=payload)
     return user in response.text
-
-
-# In[8]:
 
 def place_bet(session, player, wager):
     """
@@ -78,9 +56,6 @@ def place_bet(session, player, wager):
     response = session.post(BET_URL, data=payload)
     return "1" in response.text
 
-
-# In[9]:
-
 def get_balance(session, user):
     """
     Get amount of wager
@@ -91,9 +66,6 @@ def get_balance(session, user):
     res_html = soup.find("span", {"id": "balance"})
     return float(res_html.replace(",", "."))
 
-
-# In[10]:
-
 def allready_connected(session, user):
     """
     Check if user is allready connected
@@ -102,9 +74,6 @@ def allready_connected(session, user):
     response = session.get(MAIN_URL)
     return user in response.text
 
-
-# In[11]:
-
 def get_state(session):
     """
     Get the state
@@ -112,9 +81,6 @@ def get_state(session):
     """
     response = session.get(STATE_URL)
     return response.json()
-
-
-# In[22]:
 
 def insert_event_to_db(p1name, p2name, pwon):
     """
@@ -132,9 +98,6 @@ def insert_event_to_db(p1name, p2name, pwon):
     cursor.execute("""INSERT INTO events(event_date, p1_name, p2_name, p1_win, p2_win) VALUES(:event_date, :p1_name, :p2_name, :p1_win, :p2_win)""", data)
     conn.commit()
     conn.close()
-
-
-# In[13]:
 
 def on_ws_msg(*args):
     """
@@ -168,15 +131,9 @@ def on_ws_msg(*args):
             insert_event_to_db(p1, p2, pwon=2)
     lastStatus = status
 
-
-# In[14]:
-
 #Create Request session
 session = requests.session()
 session.headers.update(headers)
-
-
-# In[23]:
 
 #Connect to websocket
 socket = SocketIO(WS_URL, WS_PORT)
