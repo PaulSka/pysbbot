@@ -81,7 +81,7 @@ def insert_event_to_db(p1name, p2name, pwon):
     cursor.execute("""INSERT INTO events(event_date, p1_name, p2_name, p1_win, p2_win) VALUES(:event_date, :p1_name, :p2_name, :p1_win, :p2_win)""", data)
     conn.commit()
     conn.close()
-	
+    
 def insert_bet_to_db(cash):
     """
     Insert into db data ...
@@ -95,7 +95,7 @@ def insert_bet_to_db(cash):
     cursor.execute("""INSERT INTO history(date, cash) VALUES(:date, :cash)""", data)
     conn.commit()
     conn.close()
-	
+    
 def getPlayerWin(player):
     """
     Get all win for player
@@ -117,7 +117,7 @@ def getPlayerWin(player):
     p2_win = 0 if p2_win == None else p2_win
     conn.close()
     return(p1_win + p2_win)
-	
+    
 def getPlayerWinVS(p1, p2):
     """
     Get all win for p1 vs p2
@@ -142,7 +142,7 @@ def getPlayerWinVS(p1, p2):
     p1_win_2 = 0 if p1_win_2 == None else p1_win_2
     p2_win_2 = 0 if p2_win_2 == None else p2_win_2
     return({"p1" : p1_win_1 + p1_win_2, "p2" : p2_win_1 + p2_win_2})
-	
+    
 def getStatPlayer(p1, p2):
     """
     Get some stat for each player
@@ -170,7 +170,7 @@ def getStatPlayer(p1, p2):
     else:
         return potential_winner
     return potential_winner
-	
+    
 def bet(session, p1, p2):
     """
     Bet !
@@ -206,7 +206,7 @@ def on_ws_msg(*args):
     if changed:
         if status == 'open':
             print("New game start")
-			bet(session, p1, p2)
+            bet(session, p1, p2)
         elif status == 'locked':
             print("Game is lock")
         elif status == '1':
