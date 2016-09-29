@@ -38,7 +38,6 @@ def place_bet(session, player, wager):
         "wager": wager
     }
     response = session.post(config_sb.BET_URL, data=payload)
-    print(response.text)
     return "1" in response.text
 
 def get_balance(session, user):
@@ -154,20 +153,20 @@ def getStatPlayer(p1, p2):
     potential_winner = None
     res_vs = getPlayerWinVS(p1,p2)
     if res_vs["p1"] > res_vs["p2"]:
-        potential_winner = "1"
+        potential_winner = "player1"
     elif res_vs["p1"] < res_vs["p2"]:
-        potential_winner = "2"
+        potential_winner = "player2"
     elif res_vs["p1"] == res_vs["p2"]:
         #check for each player stat
         p1_win = getPlayerWin(p1)
         p2_win = getPlayerWin(p2)
         if p1_win > p2_win:
-            potential_winner = "1"
+            potential_winner = "player1"
         elif p1_win < p2_win:
-            potential_winner = "2"
+            potential_winner = "player2"
         elif p1_win == p2_win:
             #Invok god of RNG
-            potential_winner = random.choice(["1", "2"])
+            potential_winner = random.choice(["player1", "player2"])
         else:
             return potential_winner
     else:
@@ -230,6 +229,7 @@ print("Saltybot is running ...")
 #Create Request session
 session = requests.session()
 session.headers.update(config_sb.headers)
+
 
 #Connect to SB
 if connect(session, config_sb.EMAIL, config_sb.PASSWORD, config_sb.USER):
