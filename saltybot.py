@@ -8,7 +8,7 @@ import bs4 as BeautifulSoup
 from socketIO_client import SocketIO
 import sqlite3
 import datetime
-import config_sb_sb
+import config_sb
 import random
 
 
