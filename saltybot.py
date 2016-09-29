@@ -45,7 +45,7 @@ def get_balance(session, user):
     Return float
     """
     response = session.get(config_sb.MAIN_URL)
-    soup = BeautifulSoup.BeautifulSoup(response.text, "lxml")
+    soup = BeautifulSoup.BeautifulSoup(response.text, "html.parser")
     res_html = soup.find("span", {"id": "balance"})
     return float(res_html.text.replace(",", "."))
 
