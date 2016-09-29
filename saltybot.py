@@ -10,6 +10,7 @@ import sqlite3
 import datetime
 import config_sb
 import random
+import sys
 
 
 #Special Function
@@ -28,7 +29,7 @@ def connect(session, email, password, user):
 
 def place_bet(session, player, wager):
     """
-    Place wager (str not rounded) for player
+    Place wager (str not rounded) for player (1 or 2)
     Return True if ok
     """
     payload = {
@@ -37,6 +38,7 @@ def place_bet(session, player, wager):
         "wager": wager
     }
     response = session.post(config_sb.BET_URL, data=payload)
+    print(response.text)
     return "1" in response.text
 
 def get_balance(session, user):
@@ -152,20 +154,20 @@ def getStatPlayer(p1, p2):
     potential_winner = None
     res_vs = getPlayerWinVS(p1,p2)
     if res_vs["p1"] > res_vs["p2"]:
-        potential_winner = p1
+        potential_winner = "1"
     elif res_vs["p1"] < res_vs["p2"]:
-        potential_winner = p2
+        potential_winner = "2"
     elif res_vs["p1"] == res_vs["p2"]:
         #check for each player stat
         p1_win = getPlayerWin(p1)
         p2_win = getPlayerWin(p2)
         if p1_win > p2_win:
-            potential_winner = p1
+            potential_winner = "1"
         elif p1_win < p2_win:
-            potential_winner = p2
+            potential_winner = "2"
         elif p1_win == p2_win:
             #Invok god of RNG
-            potential_winner = random.choice([p1, p2])
+            potential_winner = random.choice(["1", "2"])
         else:
             return potential_winner
     else:
@@ -182,9 +184,14 @@ def bet(session, p1, p2):
     #get gold balance
     gold_balance = get_balance(session, config_sb.USER)
     #Bet
-    print("I place %s for player %s" %(gold_balance, potential_winner))
-    if place_bet(session, potential_winner, gold_balance):
-        print("Bet accepted !")
+    if allready_connected(session, config_sb.USER):
+        print("I place %s for player %s" %(gold_balance, potential_winner))
+        if place_bet(session, potential_winner, gold_balance):
+            print("Bet accepted !")
+        else:
+            print("Bet refused !")
+    else:
+        print("Cannot logged, abort !")
 
 def on_ws_msg(*args):
     """
@@ -225,7 +232,10 @@ session = requests.session()
 session.headers.update(config_sb.headers)
 
 #Connect to SB
-connect(session, config_sb.EMAIL, config_sb.PASSWORD, config_sb.USER)
+if connect(session, config_sb.EMAIL, config_sb.PASSWORD, config_sb.USER):
+    print("Login OK !")
+else:
+    sys.exit("Unable to login ! Check your conf !")
 
 #Connect to websocket
 socket = SocketIO(config_sb.WS_URL, config_sb.WS_PORT)
