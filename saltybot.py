@@ -8,7 +8,7 @@ import bs4 as BeautifulSoup
 from socketIO_client import SocketIO
 import sqlite3
 import datetime
-import config_sb
+import config_sb_sb
 import random
 
 
@@ -86,7 +86,7 @@ def insert_bet_to_db(cash):
     """
     Insert into db data ...
     """
-    conn = sqlite3.connect(config.SQLITE_PATH)
+    conn = sqlite3.connect(config_sb.SQLITE_PATH)
     cursor = conn.cursor()
     data = {
         "date" : datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
@@ -101,7 +101,7 @@ def getPlayerWin(player):
     Get all win for player
     getPlayerWin("AA")
     """
-    conn = sqlite3.connect(config.SQLITE_PATH)
+    conn = sqlite3.connect(config_sb.SQLITE_PATH)
     cursor = conn.cursor()
     p1_win = cursor.execute("""
         SELECT
@@ -123,7 +123,7 @@ def getPlayerWinVS(p1, p2):
     Get all win for p1 vs p2
     print(getPlayerWinVS("Spera", "Kull"))
     """
-    conn = sqlite3.connect(config.SQLITE_PATH)
+    conn = sqlite3.connect(config_sb.SQLITE_PATH)
     cursor = conn.cursor()
     p1_win_1, p2_win_1 = cursor.execute("""
         SELECT 
@@ -180,7 +180,7 @@ def bet(session, p1, p2):
     #get potential winner
     potential_winner = getStatPlayer(p1, p2)
     #get gold balance
-    gold_balance = get_balance(session, config.USER)
+    gold_balance = get_balance(session, config_sb.USER)
     #Bet
     place_bet(session, potential_winner, gold_balance)
     print("I place %s for player %s" %(gold_balance, potential_winner))
@@ -224,7 +224,7 @@ session = requests.session()
 session.headers.update(config_sb.headers)
 
 #Connect to SB
-connect(session, config.EMAIL, config.PASSWORD, config.USER)
+connect(session, config_sb.EMAIL, config_sb.PASSWORD, config_sb.USER)
 
 #Connect to websocket
 socket = SocketIO(config_sb.WS_URL, config_sb.WS_PORT)

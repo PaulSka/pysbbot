@@ -1,3 +1,5 @@
 git clone ...
 docker build -t pysbbot . 
 docker run -d --name pysbbot -e PYTHONUNBUFFERED=0 -v /home/pirate/pysbbot:/data/pysbbot pysbbot python2.7 /data/pysbbot/saltybot.py
+#For show logs
+docker logs -f --tail 20 -t pysbbot
