@@ -47,7 +47,7 @@ def get_balance(session, user):
     response = session.get(config_sb.MAIN_URL)
     soup = BeautifulSoup.BeautifulSoup(response.text, "html.parser")
     res_html = soup.find("span", {"id": "balance"})
-    return float(res_html.text.replace(",", "."))
+    return int(res_html.text.replace(",", ""))
 
 def allready_connected(session, user):
     """
@@ -182,8 +182,9 @@ def bet(session, p1, p2):
     #get gold balance
     gold_balance = get_balance(session, config_sb.USER)
     #Bet
-    place_bet(session, potential_winner, gold_balance)
     print("I place %s for player %s" %(gold_balance, potential_winner))
+    if place_bet(session, potential_winner, gold_balance):
+        print("Bet accepted !")
 
 def on_ws_msg(*args):
     """
