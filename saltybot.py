@@ -253,8 +253,4 @@ def main_loop():
       socket.wait(seconds=1)
 
 if __name__ == "__main__":
-    while True:
-        try:
-            main_loop()
-        except:
-            time.sleep(10)
+    main_loop()
