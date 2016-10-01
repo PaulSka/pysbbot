@@ -225,7 +225,6 @@ def on_ws_msg(*args):
             insert_event_to_db(p1, p2, pwon=2)
     lastStatus = status
 
-def main_lopp():
 print("Saltybot is running ...")
 #Create Request session
 session = requests.session()
