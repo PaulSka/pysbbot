@@ -11,7 +11,6 @@ import datetime
 import config_sb
 import random
 import sys
-import time
 
 
 #Special Function
@@ -226,31 +225,28 @@ def on_ws_msg(*args):
             insert_event_to_db(p1, p2, pwon=2)
     lastStatus = status
 
-def main_loop():
-    print("Saltybot is running ...")
-    #Create Request session
-    session = requests.session()
-    session.headers.update(config_sb.headers)
+def main_lopp():
+print("Saltybot is running ...")
+#Create Request session
+session = requests.session()
+session.headers.update(config_sb.headers)
 
 
-    #Connect to SB
-    if connect(session, config_sb.EMAIL, config_sb.PASSWORD, config_sb.USER):
-        print("Login OK !")
-    else:
-        sys.exit("Unable to login ! Check your conf !")
+#Connect to SB
+if connect(session, config_sb.EMAIL, config_sb.PASSWORD, config_sb.USER):
+    print("Login OK !")
+else:
+    sys.exit("Unable to login ! Check your conf !")
 
-    #Connect to websocket
-    socket = SocketIO(config_sb.WS_URL, config_sb.WS_PORT)
+#Connect to websocket
+socket = SocketIO(config_sb.WS_URL, config_sb.WS_PORT)
 
-    #Attach function to message
-    socket.on('message', on_ws_msg)
-    lastStatus = ""
-    p1 = ""
-    p2 = ""
+#Attach function to message
+socket.on('message', on_ws_msg)
+lastStatus = ""
+p1 = ""
+p2 = ""
 
-    #Loop !
-    while True:
-      socket.wait(seconds=1)
-
-if __name__ == "__main__":
-    main_loop()
+#Loop !
+while True:
+  socket.wait(seconds=1)
